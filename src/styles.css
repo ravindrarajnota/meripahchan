@@ -1,0 +1,124 @@
+body {
+    margin: 0;
+    font-family: Inter, system-ui, Arial, sans-serif;
+    background: #f4f6f8;
+  }
+  
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .sidebar {
+    width: 230px;
+    background: #111827;
+    color: #fff;
+    padding: 20px;
+  }
+  
+  .logo {
+    color: #DAA520;
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .menu {
+    display: block;
+    padding: 10px;
+    margin-bottom: 8px;
+    color: #d1d5db;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+  
+  .menu.active,
+  .menu:hover {
+    background: #1f2937;
+    color: #DAA520;
+  }
+  
+  .main {
+    flex: 1;
+  }
+  
+  .header {
+    background: #fff;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: 600;
+  }
+  
+  .page {
+    padding: 24px;
+  }
+  
+  .card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+  }
+  
+  button {
+    background: #DAA520;
+    color: #000;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  button.secondary {
+    background: #e5e7eb;
+  }
+  
+  button.danger {
+    background: #ef4444;
+    color: #fff;
+  }
+  
+  .table {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .table th, .table td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+  }
+  
+  .actions button {
+    margin-right: 8px;
+  }
+  .page {
+    padding: 24px;
+  }
+  
+  .card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  
+  .card h2, .card h3 {
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .card strong {
+    color: #374151;
+  }
+  
+  
