@@ -37,7 +37,7 @@ let roles = [
 ];
 
 let settings = [
-    { id: 1, baseUrl: "http://localhost:5173" }
+    { id: 1, baseUrl: "https://meripehachan-10.onrender.com" }
   ];
 
 /* =========================
