@@ -9,7 +9,7 @@ export default function UserForm({ onSuccess, editUser }) {
       try {
         const res = await SettingAPI.getAll();
         if (res.data && res.data.length > 0) {
-          setBaseUrl(res.data[0].baseUrl);
+          setBaseUrl(res.data[0].Base_url);
         }
       } catch (err) {
         console.error("Settings error:", err);
