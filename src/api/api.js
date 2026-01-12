@@ -45,7 +45,7 @@ let settings = [
 ========================= */
 
 export const api = axios.create({
-  baseURL: "https://meripehachan-9.onrender.com/api",
+  baseURL: "https://meripehachan-10.onrender.com/api",
 });
 
 /* =========================
