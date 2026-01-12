@@ -14,7 +14,7 @@ export default function UserDetails() {
   }, [id]);
 
   if (!user) {
-    return <div className="page"><p>User not found</p></div>;
+    return <div className="page"><p><h2>Loading.....</h2></p></div>;
   }
 
   return (
