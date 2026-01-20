@@ -37,7 +37,7 @@ let roles = [
 ];
 
 let settings = [
-    { id: 1, Base_url: "https://n2rup1mfw3.execute-api.us-east-1.amazonaws.com" }
+    { id: 1, Base_url: "https://pk1gdyl5s2.execute-api.us-east-1.amazonaws.com" }
   ];
 
 /* =========================
@@ -45,7 +45,7 @@ let settings = [
 ========================= */
 
 export const api = axios.create({
-  baseURL: "https://n2rup1mfw3.execute-api.us-east-1.amazonaws.com/dev/api/",
+  baseURL: "https://pk1gdyl5s2.execute-api.us-east-1.amazonaws.com/dev/api/",
 });
 
 /* =========================
