@@ -37,7 +37,7 @@ let roles = [
 ];
 
 let settings = [
-    { id: 1, Base_url: "https://meripehachan-11.onrender.com" }
+    { id: 1, Base_url: "https://n2rup1mfw3.execute-api.us-east-1.amazonaws.com" }
   ];
 
 /* =========================
@@ -45,7 +45,7 @@ let settings = [
 ========================= */
 
 export const api = axios.create({
-  baseURL: "https://meripehachan-11.onrender.com/api",
+  baseURL: "https://n2rup1mfw3.execute-api.us-east-1.amazonaws.com/dev/api/",
 });
 
 /* =========================
