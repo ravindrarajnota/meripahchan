@@ -1,7 +1,6 @@
 import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { UserAPI } from "../api/api";
-import QRCard from "../components/QRCard";
 
 export default function UserDetails() {
   const { id } = useParams();
@@ -14,58 +13,42 @@ export default function UserDetails() {
   }, [id]);
 
   if (!user) {
-    return <div className="page"><p><h2>Loading.....</h2></p></div>;
+    return (
+      <div style={styles.page}>
+        <h2>Loading...</h2>
+      </div>
+    );
   }
 
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        <h2 style={{ marginBottom: 4 }}>
+        <h2 style={{ marginBottom: 4, textAlign: "center" }}>
           {isPublicQR ? "Meri Pahchan" : "User Details"}
         </h2>
         <p style={styles.subText}>Verified Identity</p>
-
-        <Info label="Name" value={user.name} />
-
-        <ContactRow
-          label="Mobile"
-          number={user.mobile}
-        />
-
-        {user.alternative_number && (
-          <ContactRow
-            label="Alternate"
-            number={user.alternative_number}
-          />
-        )}
-
-        {!isPublicQR && <Info label="Status" value={user.status} />}
-
-        {/* 🚓 Emergency Section */}
-        <div style={styles.emergencyBox}>
-          <h4 style={{ marginBottom: 10 }}>Emergency Contacts</h4>
-
-          <EmergencyButton
-            label="Police"
-            number="112"
-            color="#dc3545"
-            icon="🚓"
-          />
-
-          <EmergencyButton
-            label="Ambulance"
-            number="108"
-            color="#fd7e14"
-            icon="🚑"
-          />
+        <div style={styles.infoGrid}>
+          <InfoCard label="Name" value={user.name} />
+          <InfoCard label="Vehicle No." value={user.other} />
         </div>
 
-        {!isPublicQR && (
-          <>
-            <QRCard value={window.location.href} />
-            <p style={styles.footerText}>Verified via MeriPahchan</p>
-          </>
-        )}
+        {/* 📱 Mobile & Alternate Numbers */}
+        <div style={styles.contactGrid}>
+          <ContactSquare label="Mobile" number={user.mobile} primary />
+          {user.alternative_number && (
+            <ContactSquare
+              label="Alternate"
+              number={user.alternative_number}
+            />
+          )}
+        </div>
+
+        {/* 🚨 Emergency – single line, not highlighted */}
+        <div style={styles.emergencyRow}>
+          <EmergencyLink label="Emergency" number="112" />
+          <EmergencyLink label="Police" number="100" />
+          <EmergencyLink label="Ambulance" number="108" />
+        </div>
 
         <p style={styles.powered}>Powered by MeriPahchan</p>
       </div>
@@ -73,46 +56,66 @@ export default function UserDetails() {
   );
 }
 
-/* 🔹 Contact Row with Call + WhatsApp */
-function ContactRow({ label, number }) {
+/* 🔹 Contact Square */
+function ContactSquare({ label, number, primary }) {
   return (
-    <div style={styles.row}>
-      <div>
-        <strong>{label}:</strong>
-        <div>{number}</div>
-      </div>
+    <div
+      style={{
+        ...styles.contactSquare,
+        borderColor: primary ? "#0d6efd" : "#dee2e6"
+      }}
+    >
+      <div style={styles.squareLabel}>{label}</div>
+      <div style={styles.squareNumber}>{number}</div>
 
-      <div style={styles.actions}>
-        <a href={`tel:${number}`} style={styles.iconBtn}>📞</a>
+      {/* 📞 💬 Highlighted actions */}
+      <div style={styles.squareActions}>
+        <a href={`tel:${number}`} style={styles.callBtn}>📞</a>
         <a
           href={`https://wa.me/91${number}`}
           target="_blank"
           rel="noopener noreferrer"
-          style={styles.iconBtn}
+          style={styles.whatsappBtn}
         >
-          💬
+            <WhatsAppIcon />
         </a>
       </div>
     </div>
   );
 }
-
-/* 🔹 Emergency Button */
-function EmergencyButton({ label, number, color, icon }) {
+function WhatsAppIcon() {
   return (
-    <a
-      href={`tel:${number}`}
-      style={{
-        ...styles.emergencyBtn,
-        background: color
-      }}
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 32 32"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      {icon} {label} ({number})
+      <path d="M16.02 3C9.39 3 4 8.38 4 15c0 2.65.88 5.1 2.36 7.1L4 29l7.12-2.29A11.9 11.9 0 0 0 16.02 27C22.64 27 28 21.62 28 15S22.64 3 16.02 3zm6.58 17.02c-.28.79-1.63 1.53-2.24 1.6-.57.06-1.3.09-2.1-.13-.48-.13-1.1-.36-1.9-.72-3.34-1.45-5.52-4.86-5.69-5.08-.17-.22-1.36-1.82-1.36-3.47 0-1.65.86-2.46 1.17-2.8.31-.34.68-.43.9-.43h.65c.2 0 .46-.07.72.55.28.62.95 2.16 1.03 2.31.09.15.15.34.03.55-.12.22-.18.35-.36.55-.18.2-.38.44-.55.6-.18.18-.36.37-.15.73.21.36.93 1.54 2 2.5 1.37 1.22 2.52 1.6 2.88 1.78.36.18.57.15.79-.09.22-.25.9-1.05 1.14-1.41.25-.36.49-.3.82-.18.34.12 2.13 1 2.5 1.18.37.18.61.27.7.42.09.15.09.86-.18 1.65z"/>
+    </svg>
+  );
+}
+
+/* 🚨 Emergency inline link */
+function EmergencyLink({ label, number }) {
+  return (
+    <a href={`tel:${number}`} style={styles.emergencyLink}>
+      {label}: <strong>{number}</strong>
     </a>
   );
 }
 
-/* 🔹 Simple info row */
+function InfoCard({ label, value }) {
+  return (
+    <div style={styles.infoCard}>
+      <div style={styles.infoLabel}>{label}</div>
+      <div style={styles.infoValue}>{value}</div>
+    </div>
+  );
+}
+
+/* 🔹 Info Row */
 function Info({ label, value }) {
   return (
     <div style={{ marginBottom: 12 }}>
@@ -122,254 +125,150 @@ function Info({ label, value }) {
   );
 }
 
-/* 🔹 Styles */
+/* 🎨 Styles */
 const styles = {
   page: {
     minHeight: "100vh",
     background: "#f4f6f9",
     display: "flex",
-    alignItems: "center",
     justifyContent: "center",
-    padding: 16
+    alignItems: "stretch",   // ⬅️ IMPORTANT
+    padding: 12
   },
+  
+  
+
   card: {
     background: "#fff",
     maxWidth: 420,
     width: "100%",
     padding: 24,
-    borderRadius: 16,
-    boxShadow: "0 10px 25px rgba(0,0,0,0.08)"
+    borderRadius: 18,
+    boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
+    marginTop: 12
   },
+  
+
   subText: {
     color: "#777",
+    fontSize: 14,
     marginBottom: 20,
-    fontSize: 14
+    textAlign: "center"
   },
-  row: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "10px 0",
-    borderBottom: "1px solid #eee"
+
+  /* Contacts */
+  contactGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 12,
+    marginBottom: 20
   },
-  actions: {
-    display: "flex",
-    gap: 10
-  },
-  iconBtn: {
-    fontSize: 20,
-    textDecoration: "none"
-  },
-  emergencyBox: {
-    marginTop: 20,
-    padding: 16,
-    background: "#f8f9fa",
-    borderRadius: 12
-  },
-  emergencyBtn: {
-    display: "block",
-    color: "#fff",
-    padding: "12px",
-    borderRadius: 10,
+
+  contactSquare: {
+    border: "2px solid",
+    borderRadius: 14,
+    padding: 14,
     textAlign: "center",
-    textDecoration: "none",
-    fontWeight: 600,
-    marginBottom: 10
+    background: "#fff"
   },
-  footerText: {
-    marginTop: 12,
-    textAlign: "center",
+
+  squareLabel: {
     fontSize: 13,
-    color: "#777"
+    color: "#6c757d",
+    marginBottom: 6
   },
-  powered: {
-    marginTop: 16,
+
+  squareNumber: {
+    fontSize: 16,
+    fontWeight: 600,
+    marginBottom: 12
+  },
+
+  squareActions: {
+    display: "flex",
+    justifyContent: "center",
+    gap: 16
+  },
+
+/* 📞 Call – calm & premium */
+callBtn: {
+  width: 44,
+  height: 44,
+  borderRadius: "50%",
+  background: "#f1f3f5",
+  color: "#212529",
+  fontSize: 20,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  textDecoration: "none",
+  border: "1px solid #dee2e6"
+},
+
+/* 💬 WhatsApp – subtle green */
+/* 💬 WhatsApp – light & subtle */
+whatsappBtn: {
+  width: 44,
+  height: 44,
+  borderRadius: "50%",
+  background: "#f3faf5",
+  color: "#5fcf8e",
+  fontSize: 20,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  textDecoration: "none",
+  border: "1px solid #e1f3e7"
+},
+
+emergencyRow: {
+  display: "flex",
+  justifyContent: "space-between",
+  marginTop: 24,
+  paddingTop: 14,
+  borderTop: "1px solid #e9ecef",
+  fontSize: 13,
+  background: "#fff"
+},
+
+
+emergencyLink: {
+  color: "#495057",
+  textDecoration: "none"
+},
+
+powered: {
+  marginTop: "auto",   // ⬅️ pushes to bottom
+  textAlign: "center",
+  fontSize: 12,
+  color: "#aaa",
+  paddingTop: 16
+},
+
+  infoGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 12,
+    marginBottom: 16
+  },
+  
+  infoCard: {
+    background: "#f8f9fa",
+    borderRadius: 12,
+    padding: 12,
     textAlign: "center",
+    border: "1px solid #eee"
+  },
+  
+  infoLabel: {
     fontSize: 12,
-    color: "#aaa"
+    color: "#6c757d",
+    marginBottom: 4
+  },
+  
+  infoValue: {
+    fontSize: 15,
+    fontWeight: 600
   }
+  
 };
-
-
-// import { useParams, useLocation } from "react-router-dom";
-// import { useEffect, useState } from "react";
-// import { UserAPI } from "../api/api";
-// import QRCard from "../components/QRCard";
-
-// export default function UserDetails() {
-//   const { id } = useParams();
-//   const location = useLocation();
-//   const isPublicQR = location.pathname.startsWith("/qr");
-//   const [user, setUser] = useState(null);
-
-//   useEffect(() => {
-//     UserAPI.getById(id).then((res) => setUser(res.data));
-//   }, [id]);
-
-//   if (!user)
-//     return (
-//       <div className="page">
-//         <p>User not found</p>
-//       </div>
-//     );
-
-//   return (
-//     <div
-//       className="page"
-//       style={{
-//         minHeight: "100vh",
-//         display: "flex",
-//         alignItems: "center",
-//         justifyContent: "center",
-//         background: "#f6f7fb",
-//         padding: 16
-//       }}
-//     >
-//       <div
-//         className="card"
-//         style={{
-//           maxWidth: 420,
-//           width: "100%",
-//           padding: 24,
-//           borderRadius: 16,
-//           boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-//           background: "#fff",
-//           textAlign: "center"
-//         }}
-//       >
-//         <h2 style={{ marginBottom: 8 }}>
-//           {isPublicQR ? "Meri Pahchan" : "User Details"}
-//         </h2>
-
-//         <p style={{ color: "#777", marginBottom: 20 }}>
-//           Verified Identity
-//         </p>
-
-//         <div style={{ textAlign: "left", marginBottom: 20 }}>
-//           <Info label="Name" value={user.name} />
-//           <Info label="Mobile" value={user.mobile} />
-//           {user.alternative_number && (
-//             <Info label="Alt Number" value={user.alternative_number} />
-//           )}
-//           {!isPublicQR && <Info label="Status" value={user.status} />}
-//         </div>
-
-//         {/* 📞 Call Button */}
-//         <a
-//           href={`tel:${user.mobile}`}
-//           style={{
-//             display: "block",
-//             textDecoration: "none",
-//             background: "#28a745",
-//             color: "#fff",
-//             padding: "14px 20px",
-//             borderRadius: 10,
-//             fontSize: 16,
-//             fontWeight: 600,
-//             marginBottom: 12
-//           }}
-//         >
-//           📞 Call Now
-//         </a>
-
-//         {/* 💬 WhatsApp */}
-//         <a
-//           href={`https://wa.me/91${user.mobile}`}
-//           target="_blank"
-//           rel="noopener noreferrer"
-//           style={{
-//             display: "block",
-//             textDecoration: "none",
-//             background: "#25D366",
-//             color: "#fff",
-//             padding: "12px 20px",
-//             borderRadius: 10,
-//             fontSize: 15,
-//             fontWeight: 500,
-//             marginBottom: 20
-//           }}
-//         >
-//           💬 WhatsApp
-//         </a>
-
-//         {!isPublicQR && (
-//           <>
-//             <QRCard value={window.location.href} />
-//             <p style={{ marginTop: 12, fontSize: 13, color: "#888" }}>
-//               Verified via MeriPahchan
-//             </p>
-//           </>
-//         )}
-
-//         <p style={{ marginTop: 16, fontSize: 12, color: "#aaa" }}>
-//           Powered by MeriPahchan
-//         </p>
-//       </div>
-//     </div>
-//   );
-// }
-
-// /* 🔹 Small reusable info row */
-// function Info({ label, value }) {
-//   return (
-//     <div style={{ marginBottom: 10 }}>
-//       <strong style={{ color: "#555" }}>{label}:</strong>
-//       <div style={{ fontSize: 15 }}>{value}</div>
-//     </div>
-//   );
-// }
-
-
-
-// // import { useParams, useLocation } from "react-router-dom";
-// // import { useEffect, useState } from "react";
-// // import { UserAPI } from "../api/api";
-// // import QRCard from "../components/QRCard";
-
-// // export default function UserDetails() {
-// //   const { id } = useParams();
-// //   const location = useLocation();
-// //   const isPublicQR = location.pathname.startsWith("/qr");
-// //   const [user, setUser] = useState(null);
-
-// //   useEffect(() => {
-// //     UserAPI.getById(id).then((res) => setUser(res.data));
-// //   }, [id]);
-
-// //   if (!user) return <div className="page"><p>User not found</p></div>;
-
-// //   return (
-// //     <div className="page" style={{ display: "flex", justifyContent: "center" }}>
-// //       <div className="card" style={{ maxWidth: 500, width: "100%", padding: 30 }}>
-// //         <h2 style={{ marginBottom: 20 }}>
-// //           {isPublicQR ? "Meri Pahchan" : "User Details"}
-// //         </h2>
-
-// //         <div style={{ marginBottom: 12 }}>
-// //           <strong>Name:</strong> {user.name}
-// //         </div>
-// //         <div style={{ marginBottom: 12 }}>
-// //           <strong>Mobile:</strong> {user.mobile}
-// //         </div>
-// //         <div style={{ marginBottom: 12 }}>
-// //           <strong>Alt Number:</strong> {user.alternative_number}
-// //         </div>
-// //         <div style={{ marginBottom: 12 }}>
-// //           <strong>Agent:</strong> {user.agentId}
-// //         </div>
-// //         <div style={{ marginBottom: 12 }}>
-// //           <strong>Status:</strong> {user.status}
-// //         </div>
-
-// //         {!isPublicQR && (
-// //           <>
-// //             <QRCard value={window.location.href} />
-// //             <p style={{ marginTop: 10, textAlign: "center", color: "#555" }}>
-// //               Verified via MeriPahchan
-// //             </p>
-// //           </>
-// //         )}
-// //       </div>
-// //     </div>
-// //   );
-// // }
