@@ -104,6 +104,14 @@ export default function UserForm({ onSuccess, editUser }) {
         }
       />
 
+      <input
+        placeholder="Vehicle Number"
+        value={form.other}
+        onChange={(e) =>
+          setForm({ ...form, other: e.target.value })
+        }
+      />
+
       {/* <input
         placeholder="Agent ID"
         value={form.agentId}

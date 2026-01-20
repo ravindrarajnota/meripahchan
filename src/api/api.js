@@ -79,7 +79,7 @@ export const UserAPI = {
       users.push(newUser);
       return Promise.resolve({ data: newUser });
     }
-    return api.post("/users/add", data);
+    return api.post("/users/", data);
   },
 
   update: (id, data) => {
@@ -122,7 +122,7 @@ export const RoleAPI = {
       roles.push(newRole);
       return Promise.resolve({ data: newRole });
     }
-    return api.post("/roles", data);
+    return api.post("/roles/", data);
   },
   update: (id, data) => {
     if (USE_MOCK) {
