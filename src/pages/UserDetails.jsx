@@ -29,7 +29,7 @@ export default function UserDetails() {
         <p style={styles.subText}>Verified Identity</p>
         <div style={styles.infoGrid}>
           <InfoCard label="Name" value={user.name} />
-          <InfoCard label="Vehicle No." value={user.other} />
+          <InfoCard label="Vehicle Number" value={user.other} />
         </div>
 
         {/* 📱 Mobile & Alternate Numbers */}
